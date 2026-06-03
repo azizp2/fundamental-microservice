@@ -1,0 +1,24 @@
+﻿services:
+  product-service:
+    build:
+      context: ./Product.Service
+    container_name: product-service
+    ports:
+      - "5001:8080"
+    depends_on:
+      - pg-database
+       
+  pg-database:
+    image: postgres:16
+    container_name: pg-database
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: productdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-db-data:/var/lib/postgresql/data
+      
+volumes:
+  pg-db-data:
