@@ -1,5 +1,128 @@
-bin/
-obj/
-/packages/
-riderModule.iml
-/_ReSharper.Caches/
+# =========================
+# Build
+# =========================
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+publish/
+
+# =========================
+# Visual Studio
+# =========================
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# =========================
+# Rider
+# =========================
+.idea/
+*.sln.iml
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# NuGet
+# =========================
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+Log/
+Logs/
+
+# =========================
+# Test Results
+# =========================
+TestResults/
+coverage/
+coverage-report/
+*.coverage
+*.coveragexml
+
+# =========================
+# Entity Framework
+# =========================
+*.dbmdl
+
+# =========================
+# User Secrets
+# =========================
+secrets.json
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+docker-compose.*.override.yml
+
+# =========================
+# Kubernetes
+# =========================
+*.kubeconfig
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Application Settings
+# =========================
+appsettings.Development.json
+appsettings.Local.json
+
+# =========================
+# RabbitMQ / Local Data
+# =========================
+rabbitmq-data/
+postgres-data/
+redis-data/
+
+# =========================
+# Temporary Files
+# =========================
+*.tmp
+*.temp
+*.cache
+
+# =========================
+# JetBrains
+# =========================
+_ReSharper*/
+*.DotSettings.user
+
+# =========================
+# SonarQube
+# =========================
+.sonarqube/
+
+# =========================
+# BenchmarkDotNet
+# =========================
+BenchmarkDotNet.Artifacts/
+
+# =========================
+# Generated Files
+# =========================
+Generated/
