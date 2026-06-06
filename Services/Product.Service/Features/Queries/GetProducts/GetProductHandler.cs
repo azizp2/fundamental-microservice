@@ -1,10 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Product.Service.Data;
-using Product.Service.Features.GetAllProduct;
-using Product.Service.Features.Shraed;
+using Product.Service.Features.Dtos;
+using Product.Service.Features.Queries.GetProductById;
 
-namespace Product.Service.Features.GetProducts;
+namespace Product.Service.Features.Queries.GetProducts;
 
 public class GetProductHandler(AppDbContext dbContext) : IRequestHandler<GetProductsQuery, List<ProductDto>?>
 {

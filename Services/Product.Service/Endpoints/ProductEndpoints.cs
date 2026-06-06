@@ -1,10 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Product.Service.Data;
-using Product.Service.Features.GetAllProduct;
-using Product.Service.Features.GetProductById;
-using Product.Service.Features.Shraed;
-using Product.Service.Features.UpdateProduct;
+using Product.Service.Features.Commands.UpdateProduct;
+using Product.Service.Features.Dtos;
+using Product.Service.Features.Queries.GetProductById;
 using Shared.Common.Exceptions;
 using Shared.Common.Responses;
 
@@ -53,9 +52,9 @@ public static class ProductEndpoints
         return Results.Created();
     }
 
-    private static async Task<IResult> Update([FromServices] IMediator mediator, [AsParameters] UpdateProductQuery query)
+    private static async Task<IResult> Update([FromServices] IMediator mediator, [AsParameters] UpdateProductCommand command)
     {
-        var product = await mediator.Send(query);
+        var product = await mediator.Send(command);
         var result = ApiResponse<string>.Ok(null!);
         return Results.Ok(result);
     }
