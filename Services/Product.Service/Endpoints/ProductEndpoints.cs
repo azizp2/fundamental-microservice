@@ -52,10 +52,18 @@ public static class ProductEndpoints
         return Results.Created();
     }
 
-    private static async Task<IResult> Update([FromServices] IMediator mediator, [AsParameters] UpdateProductCommand command)
+    private static async Task<IResult> Update(Guid id, UpdateProductDto param, [FromServices] IMediator mediator)
     {
-        var product = await mediator.Send(command);
+        var command = new UpdateProductCommand(
+            id, 
+            param.ProductName, 
+            param.Price
+        );
+        
+        await mediator.Send(command);
+        
         var result = ApiResponse<string>.Ok(null!);
+        
         return Results.Ok(result);
     }
 

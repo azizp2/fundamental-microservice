@@ -3,4 +3,4 @@ using Product.Service.Features.Dtos;
 
 namespace Product.Service.Features.Commands.UpdateProduct;
 
-public record UpdateProductCommand(UpdateProductDto param, Guid Id): IRequest<Unit>;
+public record UpdateProductCommand(Guid Id, string ProductName, decimal Price): IRequest<Unit>;

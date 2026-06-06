@@ -15,8 +15,8 @@ public class UpdateProductHandler(AppDbContext dbContext) : IRequestHandler<Upda
         if(product is null) 
             throw new AppException("product not found.", StatusCodes.Status404NotFound);
         
-        product.Name = request.param.Name;
-        product.Price = request.param.Price;
+        product.Name = request.ProductName;
+        product.Price = request.Price;
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
