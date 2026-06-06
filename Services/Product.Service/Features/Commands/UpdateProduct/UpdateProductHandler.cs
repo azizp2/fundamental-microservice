@@ -9,10 +9,10 @@ using Shared.Common.Exceptions;
 
 namespace Product.Service.Features.UpdateProduct;
 
-public class UpdateProductHandler(AppDbContext dbContext) : IRequestHandler<UpdateProductQuery, Unit>
+public class UpdateProductHandler(AppDbContext dbContext) : IRequestHandler<UpdateProductCommand, Unit>
 {
     public async Task<Unit> Handle(
-        UpdateProductQuery request,
+        UpdateProductCommand request,
         CancellationToken cancellationToken)
     {
         var product = await dbContext.Products.FindAsync(request.Id, cancellationToken);
