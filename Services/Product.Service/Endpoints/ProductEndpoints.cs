@@ -2,6 +2,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Product.Service.Data;
 using Product.Service.Features.GetAllProduct;
+using Product.Service.Features.Shraed;
+using Shared.Common.Exceptions;
+using Shared.Common.Responses;
 
 namespace Product.Service.Endpoints;
 
@@ -23,10 +26,13 @@ public static class ProductEndpoints
 
     private static async Task<IResult> GetAll([FromServices] IMediator  mediator, [AsParameters] GetProductsQuery query)
     {
-        var result = await mediator.Send(query);
+        var products = await mediator.Send(query);
+        if (products is null)
+            throw new AppException("products not found.", StatusCodes.Status404NotFound);
+        
+        var results = ApiResponse<List<ProductDto>>.Ok(products!);
 
-        return Results.BadRequest();
-        return Results.Ok(result);
+        return Results.Ok(results);
     }
 
     private static IResult GetById(Guid id)

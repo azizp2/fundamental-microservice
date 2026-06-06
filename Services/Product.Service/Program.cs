@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Product.Service.Data;
 using Product.Service.Endpoints;
+using Shared.Common.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,5 +19,6 @@ builder.Services.AddMediatR(cfg =>
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.MapProductEndpoints();
 app.Run();

@@ -22,4 +22,8 @@
     <Folder Include="Infrastructures\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\Shared.Common\Shared.Common.csproj" />
+  </ItemGroup>
+
 </Project>
