@@ -2,7 +2,9 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Product.Service.Data;
 using Product.Service.Features.GetAllProduct;
+using Product.Service.Features.GetProductById;
 using Product.Service.Features.Shraed;
+using Product.Service.Features.UpdateProduct;
 using Shared.Common.Exceptions;
 using Shared.Common.Responses;
 
@@ -16,7 +18,7 @@ public static class ProductEndpoints
         var group = endpoints.MapGroup("/api/products");
 
         group.MapGet("/getAll", GetAll);
-        group.MapGet("/getById{id:guid}", GetById);
+        group.MapGet("/getById/{id:guid}", GetById);
         group.MapPost("/create", Create);
         group.MapPut("/update/{id:guid}", Update);
         group.MapDelete("/delete/{id:guid}", Delete);
@@ -35,9 +37,15 @@ public static class ProductEndpoints
         return Results.Ok(results);
     }
 
-    private static IResult GetById(Guid id)
+    private static async Task<IResult> GetById([FromServices] IMediator mediator, [AsParameters] GetProductByIdQuery query)
     {
-        return Results.Ok(id);
+        var products = await mediator.Send(query);
+        if (products is null)
+            throw new AppException("products not found.", StatusCodes.Status404NotFound);
+        
+        var results = ApiResponse<ProductDto>.Ok(products!);
+
+        return Results.Ok(results);
     }
 
     private static IResult Create()
@@ -45,9 +53,11 @@ public static class ProductEndpoints
         return Results.Created();
     }
 
-    private static IResult Update(Guid id)
+    private static async Task<IResult> Update([FromServices] IMediator mediator, [AsParameters] UpdateProductQuery query)
     {
-        return Results.Ok(id);
+        var product = await mediator.Send(query);
+        var result = ApiResponse<string>.Ok(null!);
+        return Results.Ok(result);
     }
 
     private static IResult Delete(Guid id)

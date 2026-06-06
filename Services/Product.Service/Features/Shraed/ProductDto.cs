@@ -8,3 +8,8 @@ public record ProductDto(
     decimal Price,
     int Stock
 );
+
+public record UpdateProductDto(
+    string Name,
+    decimal Price
+);

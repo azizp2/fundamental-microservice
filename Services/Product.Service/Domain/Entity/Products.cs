@@ -2,8 +2,8 @@ namespace Product.Service.Entity;
 
 public class Products: BaseEntity
 {
-    public Guid  Id { get; init; }
-    public string Name { get; init; } = string.Empty;
-    public decimal Price { get; init; }
-    public int Stock  { get; init; }
+    public Guid  Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public int Stock  { get; set; }
 }
