@@ -24,6 +24,8 @@ public static class ProductEndpoints
     private static async Task<IResult> GetAll([FromServices] IMediator  mediator, [AsParameters] GetProductsQuery query)
     {
         var result = await mediator.Send(query);
+
+        return Results.BadRequest();
         return Results.Ok(result);
     }
 

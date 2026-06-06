@@ -6,6 +6,9 @@
 [Dd]ebug/
 [Rr]elease/
 publish/
+obj/
+**/bin/
+**/obj/
 
 # =========================
 # Visual Studio
@@ -89,8 +92,10 @@ Thumbs.db
 # =========================
 # Application Settings
 # =========================
-appsettings.Development.json
+#appsettings.Development.json
 appsettings.Local.json
+
+appsettings.json
 
 # =========================
 # RabbitMQ / Local Data
@@ -126,3 +131,11 @@ BenchmarkDotNet.Artifacts/
 # Generated Files
 # =========================
 Generated/
+
+
+#Product-Service
+#Product.Service/appsettings.json
+#Product.Service/appsettings.Development.json
+#Product.Service/bin
+
+
