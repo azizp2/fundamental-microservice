@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Shared.Common.Exceptions;
+using Shared.Common.Responses;
+using FluentValidation;
 
 namespace Shared.Common.Middlewares;
 
@@ -43,6 +45,20 @@ public class ExceptionMiddleware(
 
             switch (ex)
             {
+                case ValidationException validationException:
+                    statusCode = StatusCodes.Status400BadRequest;
+
+                    response = ApiResponse<object>.Failure(
+                        "Validation failed",
+                        validationException.Errors
+                            .GroupBy(x => x.PropertyName)
+                            .ToDictionary(
+                                x => x.Key,
+                                x => x.Select(e => e.ErrorMessage)
+                            )
+                    );
+
+                    break;
                 // =====================================
                 // CUSTOM APP EXCEPTION
                 // =====================================

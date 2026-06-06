@@ -1,6 +1,9 @@
+using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Product.Service.Data;
 using Product.Service.Endpoints;
+using Shared.Common.Behaviors;
 using Shared.Common.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +14,14 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("DefaultConnection"))
         .UseSnakeCaseNamingConvention();;
 });
+
+#region FluentValidation
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddTransient(
+    typeof(IPipelineBehavior<,>),
+    typeof(ValidationBehavior<,>)
+);
+#endregion
 
 builder.Services.AddMediatR(cfg =>
 {
