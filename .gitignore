@@ -133,9 +133,5 @@ BenchmarkDotNet.Artifacts/
 Generated/
 
 
-#Product-Service
-#Product.Service/appsettings.json
-#Product.Service/appsettings.Development.json
-#Product.Service/bin
 
 

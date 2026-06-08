@@ -1,0 +1,484 @@
+# MICROSERVICE LEARNING ROADMAP SUMMARY
+
+## Goal
+
+Membangun mini e-commerce berbasis Microservice menggunakan:
+
+* .NET
+* CQRS + MediatR
+* RabbitMQ
+* Saga Pattern
+* Outbox Pattern
+* Retry Queue
+* Delayed Message
+
+Fokus utama:
+
+* Memahami konsep
+* Bukan sekadar membuat fitur
+* Semua checkpoint harus direview sebelum dianggap selesai
+
+---
+
+# Service
+
+## Product Service
+
+Tanggung jawab:
+
+* Product CRUD
+* Stock Management
+* Reserve Stock
+* Release Stock
+
+---
+
+## Order Service
+
+Tanggung jawab:
+
+* Create Order
+* Update Order Status
+* Saga Coordination (Choreography)
+
+---
+
+## Payment Service
+
+Tanggung jawab:
+
+* Process Payment
+* Payment Success
+* Payment Failed
+
+---
+
+# Event Naming Convention
+
+## Order
+
+* order.created
+* order.paid
+* order.cancelled
+
+## Payment
+
+* payment.requested
+* payment.succeeded
+* payment.failed
+
+## Stock
+
+* stock.reserved
+* stock.unavailable
+* stock.released
+
+---
+
+# Phase 0 - Product Management
+
+RabbitMQ:
+
+No
+
+Checkpoint:
+
+## CP-00 Product Management
+
+* Create Product
+* Update Product
+* Delete Product
+* Get Product
+
+---
+
+# Phase 1 - Order Creation
+
+RabbitMQ:
+
+Yes
+
+## CP-01 Order Created
+
+Service:
+
+Order Service
+
+Publish:
+
+* order.created
+
+Consume:
+
+* None
+
+Flow:
+
+Create Order
+↓
+order.created
+
+---
+
+# Phase 2 - Stock Reservation
+
+RabbitMQ:
+
+Yes
+
+## CP-02 Product Consume Order
+
+Service:
+
+Product Service
+
+Consume:
+
+* order.created
+
+Logic:
+
+* Check Stock
+* Reserve Stock
+
+Publish:
+
+* stock.reserved
+* stock.unavailable
+
+---
+
+## CP-03 Stock Reserved
+
+Publish:
+
+* stock.reserved
+
+---
+
+## CP-04 Stock Unavailable
+
+Publish:
+
+* stock.unavailable
+
+---
+
+# Phase 3 - Payment Flow
+
+RabbitMQ:
+
+Yes
+
+## CP-05 Payment Requested
+
+Service:
+
+Order Service
+
+Consume:
+
+* stock.reserved
+
+Publish:
+
+* payment.requested
+
+---
+
+## CP-06 Payment Success
+
+Service:
+
+Payment Service
+
+Consume:
+
+* payment.requested
+
+Publish:
+
+* payment.succeeded
+
+---
+
+## CP-07 Order Paid
+
+Service:
+
+Order Service
+
+Consume:
+
+* payment.succeeded
+
+Logic:
+
+* Update Order Status = Paid
+
+---
+
+# Phase 4 - Compensation
+
+RabbitMQ:
+
+Yes
+
+## CP-08 Payment Failed
+
+Service:
+
+Payment Service
+
+Consume:
+
+* payment.requested
+
+Publish:
+
+* payment.failed
+
+---
+
+## CP-09 Release Stock
+
+Service:
+
+Product Service
+
+Consume:
+
+* payment.failed
+
+Logic:
+
+* Restore Stock
+
+Publish:
+
+* stock.released
+
+---
+
+## CP-10 Order Cancelled
+
+Service:
+
+Order Service
+
+Consume:
+
+* stock.released
+
+Logic:
+
+* Update Order Status = Cancelled
+
+---
+
+# Phase 5 - RabbitMQ Fundamentals
+
+## CP-11 Event Naming Convention
+
+Belajar:
+
+* order.*
+* payment.*
+* stock.*
+
+---
+
+## CP-12 Queue Fundamentals
+
+Belajar:
+
+* Producer
+* Consumer
+* ACK
+* DLQ
+
+---
+
+## CP-13 Direct Exchange
+
+Belajar:
+
+* Routing Key
+* Exact Match
+
+Contoh:
+
+payment.failed
+↓
+payment-failed-queue
+
+---
+
+## CP-14 Fanout Exchange
+
+Belajar:
+
+Broadcast Event
+
+Contoh:
+
+PaymentSucceeded
+↓
+Order Service
+Analytics Service
+Notification Service
+
+---
+
+## CP-15 Topic Exchange
+
+Belajar:
+
+Wildcard Routing
+
+Contoh:
+
+payment.*
+
+stock.*
+
+order.*
+
+---
+
+# Phase 6 - Reliable Messaging
+
+## CP-16 Outbox Pattern
+
+Tujuan:
+
+Reliable Publish
+
+Implementasi awal:
+
+Order Service
+
+---
+
+## CP-17 Retry Queue
+
+Tujuan:
+
+Retry Message Processing
+
+---
+
+## CP-18 Delayed Message
+
+Tujuan:
+
+Delayed Processing
+
+Contoh:
+
+Retry 30 detik kemudian
+
+---
+
+# Phase 7 - Refactor
+
+## CP-19 Messaging Layer Cleanup
+
+Target:
+
+* QueueNames
+* RoutingKeys
+* ExchangeNames
+* BaseConsumer
+* GenericPublisher
+
+Menghilangkan hardcoded string.
+
+---
+
+## CP-20 CQRS Structure Cleanup
+
+Target:
+
+Features
+├── Products
+├── Orders
+├── Payments
+
+Setiap feature memiliki:
+
+* Commands
+* Queries
+* DTOs
+
+---
+
+# Phase 8 - Saga
+
+## CP-21 Saga Choreography
+
+Flow:
+
+Order
+↓
+Product
+↓
+Payment
+↓
+Order
+
+Semua komunikasi menggunakan event.
+
+---
+
+## CP-22 Saga Orchestration
+
+Flow:
+
+Orchestrator
+↓
+Product
+↓
+Payment
+↓
+Order
+
+Menggunakan service pusat sebagai pengatur workflow.
+
+---
+
+# RabbitMQ Knowledge Acquired
+
+Sudah dipelajari:
+
+* Queue
+* Producer
+* Consumer
+* ACK
+* DLQ
+* Competing Consumer
+* Direct Exchange
+* Fanout Exchange
+* Topic Exchange
+* Saga Choreography
+* Outbox Concept
+
+---
+
+# Audit Rule
+
+Semua checkpoint:
+
+Status = NOT VERIFIED
+
+Walaupun fitur sudah dibuat.
+
+Checkpoint hanya berubah menjadi:
+
+VERIFIED
+
+setelah user meminta:
+
+review cp-xx
+
+dan lolos audit.
