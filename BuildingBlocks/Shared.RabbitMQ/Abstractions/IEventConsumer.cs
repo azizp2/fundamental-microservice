@@ -1,6 +1,8 @@
 namespace Shared.RabbitMQ.Abstractions;
 
-public class IEventConsumer
+public interface IEventConsumer<in T>
 {
-    
+    Task ConsumeAsync(
+        T message,
+        CancellationToken cancellationToken = default);
 }

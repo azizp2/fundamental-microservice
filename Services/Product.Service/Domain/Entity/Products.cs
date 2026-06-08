@@ -1,4 +1,6 @@
-namespace Product.Service.Entity;
+using Shared.Common.Domain;
+
+namespace Product.Service.Domain.Entity;
 
 public class Products: BaseEntity
 {

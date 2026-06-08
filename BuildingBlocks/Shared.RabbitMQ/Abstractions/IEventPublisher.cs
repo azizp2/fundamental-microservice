@@ -1,6 +1,9 @@
 namespace Shared.RabbitMQ.Abstractions;
 
-public class IEventPublisher
+public interface IEventPublisher
 {
-    
+    Task PublishAsync<T>(
+        string queueName,
+        T message,
+        CancellationToken cancellationToken = default);
 }

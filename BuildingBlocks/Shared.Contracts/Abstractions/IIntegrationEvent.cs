@@ -1,6 +1,7 @@
 namespace Shared.Contracts.Abstractions;
 
-public class IIntegrationEvent
+public interface IIntegrationEvent
 {
-    
+    Guid EventId { get; }
+    DateTime OccurredOn { get; }
 }

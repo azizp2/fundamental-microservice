@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Product.Service.Domain.Entity;
 
 namespace Product.Service.Entity.Configurations;
 
