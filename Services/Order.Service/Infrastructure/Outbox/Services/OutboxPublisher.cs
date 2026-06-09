@@ -14,6 +14,7 @@ public sealed class OutboxPublisher
             EventId = integrationEvent.EventId,
             EventType = typeof(T).Name,
             Payload = JsonSerializer.Serialize(integrationEvent),
+            ProcessedAt = null,
             RetryCount = 0,
             CreatedAt = DateTime.UtcNow,
         };
