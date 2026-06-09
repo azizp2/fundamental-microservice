@@ -1,15 +1,22 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Order.Service.Infrastructure.Data;
+using Order.Service.Infrastructure.Messaging.Publishers;
+using Shared.Contracts.Events.Orders;
+using Shared.RabbitMQ.Abstractions;
+using Shared.RabbitMQ.Constants;
 
 namespace Order.Service.Infrastructure.Outbox.Services;
 
 public class OutboxProcessor
 {
     private readonly AppDbContext _context;
+    private readonly IEventPublisher _publisher;
 
-    public OutboxProcessor(AppDbContext context)
+    public OutboxProcessor(AppDbContext context, IEventPublisher publisher)
     {
         _context = context;
+        _publisher = publisher;
     }
 
     public async Task ProcessAsync(
@@ -17,22 +24,37 @@ public class OutboxProcessor
     {
         var messages = await _context.OutboxMessages
             .Where(x => x.ProcessedAt == null)
+            .OrderBy(x => x.CreatedAt)
+            .Take(20)
             .ToListAsync(cancellationToken);
 
         foreach (var message in messages)
         {
             try
             {
-                // TODO:
-                // Publish RabbitMQ
+                switch (message.EventType)
+                {
+                    case nameof(OrderCreatedEvent):
 
-                message.ProcessedAt = DateTime.UtcNow;
+
+                        if (string.IsNullOrEmpty(message.Payload))
+                            continue;
+
+                        await _publisher.PublishAsync(
+                            Queues.OrderCreated,
+                            message.Payload,
+                            cancellationToken
+                            );
+
+                        break;
+                }
+
+                 message.ProcessedAt = DateTime.UtcNow;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
+                message.ErrorMessage =  ex.Message; 
                 message.RetryCount++;
-
-                message.ErrorMessage = ex.Message;
             }
         }
 
