@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Order.Service.Endpoints;
 using Order.Service.Infrastructure.Data;
 using Order.Service.Infrastructure.Messaging.Publishers;
+using Order.Service.Infrastructure.Outbox.BackgroundServices;
+using Order.Service.Infrastructure.Outbox.Services;
 using Shared.Common.Behaviors;
 using Shared.Common.Middlewares;
 using Shared.RabbitMQ.Abstractions;
@@ -38,6 +40,12 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection(RabbitMqSettings.SectionName));
 builder.Services.AddScoped<IEventPublisher, RabbitMqPublisher>();
 
+#endregion
+
+#region  Outbox Configuration
+builder.Services.AddScoped<OutboxProcessor>();
+builder.Services.AddSingleton<OutboxPublisher>();
+builder.Services.AddHostedService<OutboxBackgroundService>();
 #endregion
 
 var app = builder.Build();

@@ -2,13 +2,14 @@ using MediatR;
 using Order.Service.Commons.Constants;
 using Order.Service.Domain.Entity;
 using Order.Service.Infrastructure.Data;
+using Order.Service.Infrastructure.Outbox.Services;
 using Shared.Contracts.Events.Orders;
 using Shared.RabbitMQ.Abstractions;
 using Shared.RabbitMQ.Constants;
 
 namespace Order.Service.Application.Commands.CreateOrder;
 
-public class CreateOrderHandler(AppDbContext context, IEventPublisher eventPublisher) : IRequestHandler<CreateOrderCommand, CreateOrderDto>
+public class CreateOrderHandler(AppDbContext context, OutboxPublisher outboxPublisher) : IRequestHandler<CreateOrderCommand, CreateOrderDto>
 {
     public async Task<CreateOrderDto> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
@@ -36,8 +37,6 @@ public class CreateOrderHandler(AppDbContext context, IEventPublisher eventPubli
 
         context.Orders.Add(order);
 
-        await context.SaveChangesAsync(cancellationToken);
-        
         var createdOrderEvent = new OrderCreatedEvent
         {
             OrderId = order.Id,
@@ -49,11 +48,11 @@ public class CreateOrderHandler(AppDbContext context, IEventPublisher eventPubli
                 Qty = x.Qty
             }).ToList()
         };
+
+        var outboxMessage = outboxPublisher.Create(createdOrderEvent);
+        context.OutboxMessages.Add(outboxMessage);
         
-        await eventPublisher.PublishAsync(
-            Queues.OrderCreated,
-            createdOrderEvent,
-            cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
         
         return new CreateOrderDto
         {
