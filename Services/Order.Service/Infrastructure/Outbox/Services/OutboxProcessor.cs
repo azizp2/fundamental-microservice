@@ -35,8 +35,6 @@ public class OutboxProcessor
                 switch (message.EventType)
                 {
                     case nameof(OrderCreatedEvent):
-
-
                         if (string.IsNullOrEmpty(message.Payload))
                             continue;
 
@@ -45,7 +43,6 @@ public class OutboxProcessor
                             message.Payload,
                             cancellationToken
                             );
-
                         break;
                 }
 

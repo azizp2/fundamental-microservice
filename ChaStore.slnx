@@ -2,6 +2,7 @@
   <Project Path="BuildingBlocks/Shared.Common/Shared.Common.csproj" />
   <Project Path="BuildingBlocks/Shared.Contracts/Shared.Contracts.csproj" />
   <Project Path="BuildingBlocks/Shared.RabbitMQ/Shared.RabbitMQ.csproj" />
+  <Project Path="Services/Auth.Service/Auth.Service.csproj" />
   <Project Path="Services/Order.Service/Order.Service.csproj" />
   <Project Path="Services/Product.Service/Product.Service.csproj" />
 </Solution>
