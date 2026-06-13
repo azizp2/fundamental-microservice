@@ -29,7 +29,7 @@ public class LoginCommandHandler: IRequestHandler<LoginCommand, LoginCommandDto>
                                       || x.Email.ToLower() == request.UserName.ToLower(), cancellationToken);
 
         if (user == null)
-            throw new UnauthorizedAccessException("Invalid username or password.");
+            throw new AppException("Invalid username or password.", StatusCodes.Status401Unauthorized);
 
         var isValidPassword = BCrypt.Net.BCrypt.Verify(
             request.Password,
