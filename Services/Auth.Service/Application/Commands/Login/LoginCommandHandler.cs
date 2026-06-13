@@ -25,7 +25,8 @@ public class LoginCommandHandler: IRequestHandler<LoginCommand, LoginCommandDto>
     public async Task<LoginCommandDto> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var user = await _context.Users
-            .FirstOrDefaultAsync(x => x.Email == request.UserName, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Username.ToLower() == request.UserName.ToLower()
+                                      || x.Email.ToLower() == request.UserName.ToLower(), cancellationToken);
 
         if (user == null)
             throw new UnauthorizedAccessException("Invalid username or password.");

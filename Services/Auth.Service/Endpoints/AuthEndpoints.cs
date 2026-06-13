@@ -1,10 +1,11 @@
 using Auth.Service.Application.Commands.Login;
+using Auth.Service.Application.Commands.Register;
 using Auth.Service.Infrastructure.Authentications.JwtServices;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Common.Responses;
 
-namespace Auth.Service.Application.Endpoints;
+namespace Auth.Service.Endpoints;
 
 public static class AuthEndpoints
 {
@@ -16,17 +17,27 @@ public static class AuthEndpoints
         // group.MapGet("/getAll", GetAll);
         // group.MapGet("/getById/{id:guid}", GetById);
         group.MapPost("/register", Register);
+        group.MapPost("/login", Login);
         // group.MapPut("/update/{id:guid}", Update);
         // group.MapDelete("/delete/{id:guid}", Delete);
  
         return endpoints;
     }
 
-    private static async Task<IResult> Register([FromServices] IMediator mediator, [FromBody] LoginCommand command)
+    private static async Task<IResult> Register([FromServices] IMediator mediator, [FromBody] RegisterCommand command)
     {
         var user = await mediator.Send(command);
         
-        var result = ApiResponse<LoginCommandDto>.Ok(user, "create user successfully.");
+        var result = ApiResponse<RegisterCommandDto>.Ok(user, "create user successfully.");
+        
+        return Results.Ok(result);
+    }
+    
+    private static async Task<IResult> Login([FromServices] IMediator mediator, [FromBody] LoginCommand command)
+    {
+        var user = await mediator.Send(command);
+        
+        var result = ApiResponse<LoginCommandDto>.Ok(user, "login successfully.");
         
         return Results.Ok(result);
     }

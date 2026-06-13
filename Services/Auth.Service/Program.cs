@@ -1,4 +1,4 @@
-using Auth.Service.Application.Endpoints;
+using Auth.Service.Endpoints;
 using Auth.Service.Infrastructure.Authentications;
 using Auth.Service.Infrastructure.Authentications.JwtServices;
 using Auth.Service.Infrastructure.Data;

@@ -34,13 +34,19 @@ public class RegisterCommandHandler: IRequestHandler<RegisterCommand, RegisterCo
             Username = request.Username,
             Email = request.Email,
             PasswordHash = passwordHash,
-            Role = "User"
+            Role = "User",
+            CreatedBy = "Admin",
+            CreatedAt = DateTime.UtcNow
+            
         };
 
         await _context.AddAsync(user, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
         return new RegisterCommandDto(
-            )
+            user.Id,
+            user.Username,
+            user.Email,
+            user.Role);
     }
 }
