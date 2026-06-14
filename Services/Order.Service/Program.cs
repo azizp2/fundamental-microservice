@@ -1,7 +1,11 @@
+using System.Text;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Order.Service.Endpoints;
+using Order.Service.Infrastructure.Authentications;
 using Order.Service.Infrastructure.Data;
 using Order.Service.Infrastructure.Messaging.Publishers;
 using Order.Service.Infrastructure.Outbox.BackgroundServices;
@@ -13,6 +17,8 @@ using Shared.RabbitMQ.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("Jwt"));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -20,6 +26,30 @@ builder.Services.AddDbContext<AppDbContext>(options =>
             builder.Configuration.GetConnectionString("DefaultConnection"))
         .UseSnakeCaseNamingConvention();;
 });
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters =
+            new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+
+                IssuerSigningKey =
+                    new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(
+                            builder.Configuration["Jwt:Key"]!))
+            };
+    });
+
+builder.Services.AddAuthorization();
+
 
 #region FluentValidation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
@@ -52,6 +82,9 @@ builder.Services.AddHostedService<OutboxBackgroundService>();
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/", () => "Order Service Is Running....");
 

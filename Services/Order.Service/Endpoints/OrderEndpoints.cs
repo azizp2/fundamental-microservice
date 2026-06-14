@@ -14,7 +14,7 @@ using MediatR;
  
          // group.MapGet("/getAll", GetAll);
          // group.MapGet("/getById/{id:guid}", GetById);
-         group.MapPost("/create", Create);
+         group.MapPost("/create", Create).RequireAuthorization();
          // group.MapPut("/update/{id:guid}", Update);
          // group.MapDelete("/delete/{id:guid}", Delete);
  
