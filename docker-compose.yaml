@@ -1,4 +1,12 @@
 ﻿services:
+  auth-service:
+    build:
+      context: ./Services/Auth.Service
+    container_name: auth-service
+    ports:
+      - "5003:8080"
+    depends_on:
+      - pg-database
   product-service:
     build:
       context: ./Services/Product.Service
