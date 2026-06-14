@@ -1,18 +1,17 @@
+using Auth.Service.Endpoints;
+using Auth.Service.Infrastructure.Authentications;
+using Auth.Service.Infrastructure.Authentications.JwtServices;
+using Auth.Service.Infrastructure.Data;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Order.Service.Endpoints;
-using Order.Service.Infrastructure.Data;
-using Order.Service.Infrastructure.Messaging.Publishers;
-using Order.Service.Infrastructure.Outbox.BackgroundServices;
-using Order.Service.Infrastructure.Outbox.Services;
 using Shared.Common.Behaviors;
 using Shared.Common.Middlewares;
-using Shared.RabbitMQ.Abstractions;
-using Shared.RabbitMQ.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("Jwt"));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -36,25 +35,18 @@ builder.Services.AddMediatR(cfg =>
 });
 #endregion
 
-#region  RabbitMQ Configuration
+#region DependencyInjection
 
-builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection(RabbitMqSettings.SectionName));
-builder.Services.AddScoped<IEventPublisher, RabbitMqPublisher>();
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
-#endregion
-
-#region  Outbox Configuration
-builder.Services.AddScoped<OutboxProcessor>();
-builder.Services.AddSingleton<OutboxPublisher>();
-builder.Services.AddHostedService<OutboxBackgroundService>();
 #endregion
 
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.MapGet("/", () => "Order Service Is Running....");
+app.MapGet("/", () => "Auth Service Running...");
 
-app.MapOrderEndpoints();
+app.MapAuthEndpoints();
 
 app.Run();

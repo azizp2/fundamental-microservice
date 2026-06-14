@@ -1,7 +1,6 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Order.Service.Infrastructure.Data;
-using Order.Service.Infrastructure.Messaging.Publishers;
 using Shared.Contracts.Events.Orders;
 using Shared.RabbitMQ.Abstractions;
 using Shared.RabbitMQ.Constants;
@@ -35,8 +34,6 @@ public class OutboxProcessor
                 switch (message.EventType)
                 {
                     case nameof(OrderCreatedEvent):
-
-
                         if (string.IsNullOrEmpty(message.Payload))
                             continue;
 
@@ -45,7 +42,6 @@ public class OutboxProcessor
                             message.Payload,
                             cancellationToken
                             );
-
                         break;
                 }
 
