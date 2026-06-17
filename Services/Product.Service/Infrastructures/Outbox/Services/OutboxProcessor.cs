@@ -1,11 +1,11 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Order.Service.Infrastructure.Data;
+using Product.Service.Infrastructure.Data;
 using Shared.Contracts.Events.Orders;
 using Shared.RabbitMQ.Abstractions;
 using Shared.RabbitMQ.Constants;
 
-namespace Order.Service.Infrastructure.Outbox.Services;
+namespace Product.Service.Infrastructure.Outbox.Services;
 
 public class OutboxProcessor
 {

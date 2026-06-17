@@ -17,17 +17,19 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
+    <PackageReference Include="RabbitMQ.Client" Version="7.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Domain\Events\" />
-    <Folder Include="Features\Commands\" />
-    <Folder Include="Features\Queries\" />
-    <Folder Include="Infrastructures\" />
+    <Folder Include="Applications\Commands\" />
+    <Folder Include="Applications\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\Shared.Common\Shared.Common.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Shared.Contracts\Shared.Contracts.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Shared.RabbitMQ\Shared.RabbitMQ.csproj" />
   </ItemGroup>
 
 </Project>

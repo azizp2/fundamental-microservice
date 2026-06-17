@@ -1,6 +1,6 @@
 using Product.Service.Entity;
 
-namespace Product.Service.Features.Dtos;
+namespace Product.Service.Applications.Dtos;
 
 public record ProductDto(
     Guid Id,

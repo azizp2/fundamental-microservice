@@ -1,8 +1,8 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Product.Service.Data;
 using Product.Service.Endpoints;
+using Product.Service.Infrastructure.Data;
 using Shared.Common.Behaviors;
 using Shared.Common.Middlewares;
 

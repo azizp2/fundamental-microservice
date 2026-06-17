@@ -1,9 +1,9 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Product.Service.Data;
+using Product.Service.Infrastructure.Data;
 using Shared.Common.Exceptions;
 
-namespace Product.Service.Features.Commands.UpdateProduct;
+namespace Product.Service.Applications.Commands.UpdateProduct;
 
 public class UpdateProductHandler(AppDbContext dbContext) : IRequestHandler<UpdateProductCommand, Unit>
 {

@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Product.Service.Data;
-using Product.Service.Features.Commands.UpdateProduct;
-using Product.Service.Features.Dtos;
+using Product.Service.Applications.Commands.UpdateProduct;
+using Product.Service.Applications.Dtos;
+using Product.Service.Applications.Queries.GetProductById;
 using Product.Service.Features.Queries.GetProductById;
 using Shared.Common.Exceptions;
 using Shared.Common.Responses;

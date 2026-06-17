@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Product.Service.Domain.Entity;
-using Product.Service.Entity;
+using Product.Service.Infrastructure.Outbox.Entity;
 
-namespace Product.Service.Data;
+namespace Product.Service.Infrastructure.Data;
 
 public class AppDbContext : DbContext
 {
@@ -12,4 +12,5 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Products> Products => Set<Products>();
+    public DbSet<OutboxMessage> OutboxMessages => Set<OutboxMessage>();
 }
