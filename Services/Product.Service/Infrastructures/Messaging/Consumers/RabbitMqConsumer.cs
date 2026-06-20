@@ -8,20 +8,19 @@ using Shared.RabbitMQ.Models;
 
 namespace Product.Service.Infrastructures.Messaging.Consumers;
 
-public class RabbitMqConsumer<T> : BackgroundService
+public abstract class RabbitMqConsumer<T> : BackgroundService
 {
-    private readonly RabbitMqSettings _settings;
-    private readonly IEventConsumer<T> _consumer;
-    private readonly string _queueName;
+    protected abstract string QueueName { get; }
 
-    public RabbitMqConsumer(
-        IOptions<RabbitMqSettings> options,
-        IEventConsumer<T> consumer,
-        string queueName)
+    private  readonly RabbitMqSettings _settings;
+    private readonly IServiceProvider _serviceProvider;
+
+    protected RabbitMqConsumer(
+        IServiceProvider serviceProvider,
+        IOptions<RabbitMqSettings> options)
     {
         _settings = options.Value;
-        _consumer = consumer;
-        _queueName = queueName;
+        _serviceProvider = serviceProvider;
     }
 
     protected override async Task ExecuteAsync(
@@ -40,7 +39,7 @@ public class RabbitMqConsumer<T> : BackgroundService
             cancellationToken: stoppingToken);
 
         await channel.QueueDeclareAsync(
-            queue: _queueName,
+            queue: QueueName,
             durable: true,
             exclusive: false,
             autoDelete: false,
@@ -56,10 +55,16 @@ public class RabbitMqConsumer<T> : BackgroundService
                 var json = Encoding.UTF8.GetString(ea.Body.ToArray());
 
                 var message = JsonSerializer.Deserialize<T>(json);
+                
+                using var scope = _serviceProvider.CreateScope();
+                
+                var eventConsumer =
+                    scope.ServiceProvider
+                        .GetRequiredService<IEventConsumer<T>>();
 
                 if (message is not null)
                 {
-                    await _consumer.ConsumeAsync(
+                    await eventConsumer.ConsumeAsync(
                         message,
                         stoppingToken);
                 }
@@ -80,7 +85,7 @@ public class RabbitMqConsumer<T> : BackgroundService
         };
 
         await channel.BasicConsumeAsync(
-            queue: _queueName,
+            queue: QueueName,
             autoAck: false,
             consumer: consumer,
             cancellationToken: stoppingToken);

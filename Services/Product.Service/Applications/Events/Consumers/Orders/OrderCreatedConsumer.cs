@@ -9,10 +9,12 @@ public class OrderCreatedConsumer
     : IEventConsumer<OrderCreatedEvent>
 {
     private readonly AppDbContext _context;
+    private readonly ILogger<OrderCreatedConsumer> _logger;
 
-    public OrderCreatedConsumer(AppDbContext context)
+    public OrderCreatedConsumer(AppDbContext context, ILogger<OrderCreatedConsumer> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
     public async Task ConsumeAsync(
@@ -28,12 +30,22 @@ public class OrderCreatedConsumer
 
             if (product is null)
             {
+                _logger.LogError(
+                    "Product not found. ProductId: {ProductId}",
+                    item.ProductId);
+                
                 throw new InvalidOperationException(
                     $"Product {item.ProductId} not found");
             }
 
             if (product.Stock < item.Qty)
             {
+                _logger.LogWarning(
+                    "Insufficient stock. ProductId: {ProductId}, Stock: {Stock}, Requested: {Qty}",
+                    product.Id,
+                    product.Stock,
+                    item.Qty);
+                
                 throw new InvalidOperationException(
                     $"Insufficient stock for product {product.Id}");
             }
