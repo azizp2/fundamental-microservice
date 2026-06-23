@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
+  </ItemGroup>
+    <ItemGroup>
+    <Reference Include="Shared.Common">
+      <HintPath>Lib\Shared.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Shared.Contracts">
+      <HintPath>Lib\Shared.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Shared.RabbitMQ">
+      <HintPath>Lib\Shared.RabbitMQ.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

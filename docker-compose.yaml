@@ -24,6 +24,17 @@
       - "5002:8080"
     depends_on:
       - pg-database
+
+  api-gateway:
+    build:
+      context: ./Services/Api.Gateway
+    container_name: api-gateway
+    ports:
+      - "5010:8080"
+    depends_on:
+      - auth-service
+      - order-service
+      - product-service
       
   pg-database:
     image: postgres:16
