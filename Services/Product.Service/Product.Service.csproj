@@ -1,12 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
@@ -19,7 +17,6 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
     <PackageReference Include="RabbitMQ.Client" Version="7.2.1" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Domain\Events\" />
     <Folder Include="Applications\Commands\" />
@@ -27,9 +24,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Shared.Common">
+      <HintPath>Lib\Shared.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Shared.Contracts">
+      <HintPath>Lib\Shared.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Shared.RabbitMQ">
+      <HintPath>Lib\Shared.RabbitMQ.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\Shared.Common\Shared.Common.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\Shared.Contracts\Shared.Contracts.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\Shared.RabbitMQ\Shared.RabbitMQ.csproj" />
   </ItemGroup>
-
 </Project>
