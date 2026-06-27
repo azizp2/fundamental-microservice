@@ -17,7 +17,7 @@ public static class ProductEndpoints
         var group = endpoints.MapGroup("/api/products");
 
         group.MapGet("/getAll", GetAll);
-        group.MapGet("/getById/{id:guid}", GetById);
+        group.MapGet("/getById/{id:guid}", GetById).RequireAuthorization();
         group.MapPost("/create", Create);
         group.MapPut("/update/{id:guid}", Update);
         group.MapDelete("/delete/{id:guid}", Delete);

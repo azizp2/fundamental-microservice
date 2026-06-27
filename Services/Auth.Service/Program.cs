@@ -10,6 +10,9 @@ using Shared.Common.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("Jwt"));
 
@@ -42,6 +45,8 @@ builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 #endregion
 
 var app = builder.Build();
+
+app.UseSwagger();
 
 app.UseMiddleware<ExceptionMiddleware>();
 

@@ -10,7 +10,8 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="EFCore.NamingConventions" Version="10.0.1" />
     <PackageReference Include="MediatR" Version="14.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.9">
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.8">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -22,7 +23,6 @@
     <Folder Include="Applications\Commands\" />
     <Folder Include="Applications\Queries\" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="Shared.Common">
       <HintPath>Lib\Shared.Common.dll</HintPath>
@@ -34,7 +34,6 @@
       <HintPath>Lib\Shared.RabbitMQ.dll</HintPath>
     </Reference>
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\BuildingBlocks\Shared.Common\Shared.Common.csproj" />
     <ProjectReference Include="..\..\BuildingBlocks\Shared.Contracts\Shared.Contracts.csproj" />
