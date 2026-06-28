@@ -36,7 +36,7 @@ builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
 });
-#endregion
+#endregion 
 
 #region DependencyInjection
 
