@@ -17,26 +17,30 @@
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
     <PackageReference Include="RabbitMQ.Client" Version="7.2.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Domain\Events\" />
+    <Folder Include="Applications\Events\" />
     <Folder Include="Applications\Commands\" />
     <Folder Include="Applications\Queries\" />
+    <Folder Include="Lib\" />
   </ItemGroup>
+
   <ItemGroup>
-    <Reference Include="Shared.Common">
-      <HintPath>Lib\Shared.Common.dll</HintPath>
-    </Reference>
+    <Content Include="..\..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
+  </ItemGroup>
+
+<ItemGroup>
+  <Reference Include="Shared.Common">
+    <HintPath>Lib\Shared.Common.dll</HintPath>
+  </Reference>
     <Reference Include="Shared.Contracts">
-      <HintPath>Lib\Shared.Contracts.dll</HintPath>
-    </Reference>
+    <HintPath>Lib\Shared.Contracts.dll</HintPath>
+  </Reference>
     <Reference Include="Shared.RabbitMQ">
-      <HintPath>Lib\Shared.RabbitMQ.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\BuildingBlocks\Shared.Common\Shared.Common.csproj" />
-    <ProjectReference Include="..\..\BuildingBlocks\Shared.Contracts\Shared.Contracts.csproj" />
-    <ProjectReference Include="..\..\BuildingBlocks\Shared.RabbitMQ\Shared.RabbitMQ.csproj" />
-  </ItemGroup>
+    <HintPath>Lib\Shared.RabbitMQ.dll</HintPath>
+  </Reference>
+</ItemGroup>
 </Project>

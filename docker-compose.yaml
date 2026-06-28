@@ -9,14 +9,12 @@
       - pg-database
   product-service:
     build:
-      context: .
-      dockerfile: ./Services/Product.Service/Dockerfile
+      context: ./Services/Product.Service
     container_name: product-service
     ports:
       - "5001:8080"
     depends_on:
       - pg-database
-      - rabbitmq
       
   order-service:
     build:

@@ -19,12 +19,8 @@
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.2" />
     <PackageReference Include="RabbitMQ.Client" Version="7.2.1" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\..\BuildingBlocks\Shared.Common\Shared.Common.csproj" />
-    <ProjectReference Include="..\..\BuildingBlocks\Shared.Contracts\Shared.Contracts.csproj" />
-    <ProjectReference Include="..\..\BuildingBlocks\Shared.RabbitMQ\Shared.RabbitMQ.csproj" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
+
   </ItemGroup>
   
   <ItemGroup>

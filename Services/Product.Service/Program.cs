@@ -16,6 +16,9 @@ using Shared.RabbitMQ.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(
@@ -71,6 +74,8 @@ builder.Services.AddHostedService<OrderCreatedConsumerService>();
 #endregion
 
 var app = builder.Build();
+
+app.UseSwagger();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
