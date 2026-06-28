@@ -2,7 +2,6 @@ using Auth.Service.Application.Domain.Entities;
 using Auth.Service.Infrastructure.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Shared.Common.Exceptions;
 
 namespace Auth.Service.Application.Commands.Register;

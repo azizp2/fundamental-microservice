@@ -32,18 +32,11 @@ public class RabbitMqPublisher : IEventPublisher
 
         await using var connection = await factory.CreateConnectionAsync(cancellationToken);
 
-        await using var channel = await connection.CreateChannelAsync(cancellationToken: cancellationToken);
-
-        await channel.QueueDeclareAsync(
-            queue: queueName,
-            durable: true,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null,
-            cancellationToken: cancellationToken);
+        await using var channel = await connection.CreateChannelAsync(cancellationToken: cancellationToken);    
 
         var body = Encoding.UTF8.GetBytes(
             JsonSerializer.Serialize(message));
+        
 
         await channel.BasicPublishAsync(
             exchange: string.Empty,

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Product.Service.Applications.Events.Consumers.Orders;
 using Product.Service.Endpoints;
-using Product.Service.Infrastructure.Data;
+using Product.Service.Infrastructures.Data;
 using Product.Service.Infrastructures.Messaging.Consumers;
 using Shared.Common.Behaviors;
 using Shared.Common.Middlewares;

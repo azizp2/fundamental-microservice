@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Product.Service.Infrastructure.Data;
+using Product.Service.Infrastructures.Data;
 using Shared.Contracts.Events.Orders;
 using Shared.RabbitMQ.Abstractions;
 

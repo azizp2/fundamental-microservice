@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Product.Service.Infrastructure.Data;
+using Product.Service.Infrastructures.Data;
 using Shared.Common.Exceptions;
 
 namespace Product.Service.Applications.Commands.UpdateProduct;

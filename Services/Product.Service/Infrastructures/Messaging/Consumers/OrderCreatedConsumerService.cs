@@ -13,6 +13,9 @@ public class OrderCreatedConsumerService
 
     public OrderCreatedConsumerService(
         IServiceProvider serviceProvider,
-        IOptions<RabbitMqSettings> options)
-        : base(serviceProvider, options) { }
+        IOptions<RabbitMqSettings> options,
+        ILogger<RabbitMqConsumer<OrderCreatedEvent>> logger)
+        : base(serviceProvider, options, logger)
+    {
+    }
 }
