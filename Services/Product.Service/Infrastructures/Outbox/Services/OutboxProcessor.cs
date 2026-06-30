@@ -5,22 +5,25 @@ using Shared.Contracts.Events.Orders;
 using Shared.RabbitMQ.Abstractions;
 using Shared.RabbitMQ.Constants;
 
-namespace Product.Service.Infrastructure.Outbox.Services;
+namespace Product.Service.Infrastructures.Outbox.Services;
 
 public class OutboxProcessor
 {
     private readonly AppDbContext _context;
     private readonly IEventPublisher _publisher;
-
-    public OutboxProcessor(AppDbContext context, IEventPublisher publisher)
+    private readonly ILogger<OutboxProcessor> _logger;
+    public OutboxProcessor(AppDbContext context, IEventPublisher publisher, ILogger<OutboxProcessor> logger)
     {
         _context = context;
         _publisher = publisher;
+        _logger = logger;
     }
 
     public async Task ProcessAsync(
         CancellationToken cancellationToken)
-    {
+    { 
+        object? payload = null;
+        string queueName = null;
         var messages = await _context.OutboxMessages
             .Where(x => x.ProcessedAt == null)
             .OrderBy(x => x.CreatedAt)
@@ -28,7 +31,7 @@ public class OutboxProcessor
             .ToListAsync(cancellationToken);
 
         foreach (var message in messages)
-        {
+        {   
             try
             {
                 switch (message.EventType)
@@ -37,16 +40,31 @@ public class OutboxProcessor
                         if (string.IsNullOrEmpty(message.Payload))
                             continue;
                         
-                        var payload =  JsonSerializer.Deserialize<OrderCreatedEvent>(message.Payload);
+                        payload = JsonSerializer.Deserialize<OrderCreatedEvent>(message.Payload);
+                        queueName = Queues.OrderCreated;
 
-                        await _publisher.PublishAsync(
-                            Queues.OrderCreated,
-                            payload,
-                            cancellationToken
-                            );
+                        break;
+                    
+                    case nameof(ProductUnAvailableEvent):
+                        if (string.IsNullOrEmpty(message.Payload))
+                            continue;
+                        
+                        payload = JsonSerializer.Deserialize<ProductUnAvailableEvent>(message.Payload);
+                        queueName = Queues.ProductUnAvailable;
+                        
+                        _logger.LogError($"Processing {queueName}");
+
                         break;
                 }
+                
+                if(queueName == null)
+                    throw new Exception($"Queue {queueName} not found");
 
+                await _publisher.PublishAsync(
+                    queueName,
+                    payload,
+                    cancellationToken
+                );
                  message.ProcessedAt = DateTime.UtcNow;
             }
             catch(Exception ex)

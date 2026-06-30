@@ -6,8 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Product.Service.Applications.Events.Consumers.Orders;
 using Product.Service.Endpoints;
+using Product.Service.Infrastructure.Outbox.Services;
 using Product.Service.Infrastructures.Data;
 using Product.Service.Infrastructures.Messaging.Consumers;
+using Product.Service.Infrastructures.Messaging.Publishers;
+using Product.Service.Infrastructures.Outbox.BackgroundServices;
+using Product.Service.Infrastructures.Outbox.Services;
 using Shared.Common.Behaviors;
 using Shared.Common.Middlewares;
 using Shared.Contracts.Events.Orders;
@@ -69,8 +73,15 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.Configure<RabbitMqSettings>(builder.Configuration.GetSection(RabbitMqSettings.SectionName));
 
 builder.Services.AddScoped<IEventConsumer<OrderCreatedEvent>, OrderCreatedConsumer>();
-builder.Services.AddHostedService<OrderCreatedConsumerService>();
+builder.Services.AddScoped<IEventPublisher, RabbitMqPublisher>();
 
+builder.Services.AddHostedService<OrderCreatedConsumerService>();
+#endregion
+
+#region  Outbox Configuration
+builder.Services.AddScoped<OutboxProcessor>();
+builder.Services.AddSingleton<OutboxPublisher>();
+builder.Services.AddHostedService<OutboxBackgroundService>();
 #endregion
 
 var app = builder.Build();

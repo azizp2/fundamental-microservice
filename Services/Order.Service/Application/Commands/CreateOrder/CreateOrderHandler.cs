@@ -45,6 +45,7 @@ public class CreateOrderHandler(AppDbContext context, OutboxPublisher outboxPubl
             {
                 OrderId =  order.Id,
                 ProductId = x.ProductId,
+                ProductName = x.ProductName,
                 Qty = x.Qty
             }).ToList()
         };

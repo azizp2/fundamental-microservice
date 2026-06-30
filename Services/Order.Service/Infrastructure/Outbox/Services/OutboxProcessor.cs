@@ -21,6 +21,7 @@ public class OutboxProcessor
     public async Task ProcessAsync(
         CancellationToken cancellationToken)
     {
+        object? payload = null;
         var messages = await _context.OutboxMessages
             .Where(x => x.ProcessedAt == null)
             .OrderBy(x => x.CreatedAt)
@@ -37,16 +38,15 @@ public class OutboxProcessor
                         if (string.IsNullOrEmpty(message.Payload))
                             continue;
                         
-                        var payload =  JsonSerializer.Deserialize<OrderCreatedEvent>(message.Payload);
+                        payload =  JsonSerializer.Deserialize<OrderCreatedEvent>(message.Payload);
 
-                        await _publisher.PublishAsync(
-                            Queues.OrderCreated,
-                            payload,
-                            cancellationToken
-                            );
                         break;
                 }
-
+                await _publisher.PublishAsync(
+                    Queues.OrderCreated,
+                    payload,
+                    cancellationToken
+                );
                  message.ProcessedAt = DateTime.UtcNow;
             }
             catch(Exception ex)
